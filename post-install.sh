@@ -7,10 +7,11 @@ chown -R ${BITNAMI_APP_USER}: /home/${BITNAMI_APP_USER}
 
 # set up default config
 mkdir -p $BITNAMI_APP_DIR/conf.defaults
-mv $BITNAMI_APP_DIR/standalone/configuration $BITNAMI_APP_DIR/conf.defaults/standalone
+mv $BITNAMI_APP_DIR/conf $BITNAMI_APP_DIR/conf.defaults/standalone
 mv $BITNAMI_APP_DIR/domain/configuration $BITNAMI_APP_DIR/conf.defaults/domain
 
 # symlinks to maintain compatibility of command-line utilities (eg. add-user.sh)
+rm -rf $BITNAMI_APP_DIR/standalone/configuration
 ln -sf $BITNAMI_APP_DIR/conf/standalone $BITNAMI_APP_DIR/standalone/configuration
 ln -sf $BITNAMI_APP_DIR/conf/domain $BITNAMI_APP_DIR/domain/configuration
 
