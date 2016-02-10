@@ -1,18 +1,24 @@
 FROM bitnami/base-ubuntu:14.04-onbuild
 MAINTAINER Bitnami <containers@bitnami.com>
 
-ENV BITNAMI_APP_DIR=$BITNAMI_PREFIX/wildfly \
-    BITNAMI_APP_NAME=wildfly \
+ENV BITNAMI_APP_NAME=wildfly \
     BITNAMI_APP_USER=wildfly \
     BITNAMI_APP_DAEMON=standalone.sh|domain.sh \
-    BITNAMI_APP_VERSION=9.0.1-0-r02
+    BITNAMI_APP_VERSION=9.0.2-1 \
+    WILDFLY_PACKAGE_SHA256="82535dfdcdb22dbb194bd729cd0ea82d7a7c93674e00190457adfd428b7316e8" \
+    BITNAMI_APP_OPTIONS="--username manager --password wildfly" \
+    BITNAMI_APP_LANG=java \
+    BITNAMI_APP_LANG_VERSION=1.8.0_71-0 \
+    JAVA_PACKAGE_SHA256="f61dd50fc207e619cec30d696890694d453f4ee861e25e05c101222514f52df6"
 
-ENV BITNAMI_APP_VOL_PREFIX=/bitnami/$BITNAMI_APP_NAME \
+ENV BITNAMI_APP_DIR=$BITNAMI_PREFIX/$BITNAMI_APP_NAME \
+    BITNAMI_APP_VOL_PREFIX=/bitnami/$BITNAMI_APP_NAME \
     JAVA_HOME=$BITNAMI_PREFIX/java \
-    JRE_HOME=$BITNAMI_PREFIX/java \
-    PATH=$BITNAMI_APP_DIR/bin:$PATH
+    JRE_HOME=$BITNAMI_PREFIX/java
 
-RUN $BITNAMI_PREFIX/install.sh --jboss_manager_username manager --jboss_manager_password wildfly
+ENV PATH=$BITNAMI_APP_DIR/bin:$PATH
+
+RUN $BITNAMI_PREFIX/install.sh
 
 COPY rootfs/ /
 
