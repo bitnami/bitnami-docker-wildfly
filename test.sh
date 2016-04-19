@@ -8,8 +8,8 @@ WILDFLY_PASSWORD=test_password
 # source the helper script
 APP_NAME=wildfly
 VOL_PREFIX=/bitnami/$APP_NAME
-VOLUMES=
-SLEEP_TIME=30
+VOLUMES=$VOL_PREFIX
+SLEEP_TIME=15
 load tests/docker_helper
 
 # Link to container and execute jboss-cli
@@ -21,7 +21,7 @@ jboss_client() {
 
 # Cleans up all running/stopped containers and host mounted volumes
 cleanup_environment() {
-  container_remove default
+  container_remove_full default
 }
 
 # Teardown called at the end of each test
@@ -114,11 +114,42 @@ cleanup_environment
   [[ "$output" =~ '200 OK' ]]
 }
 
+@test "All the volumes exposed" {
+  container_create default -d
+
+  run container_inspect default --format {{.Mounts}}
+  [[ "$output" =~ "$VOL_PREFIX" ]]
+}
+
+@test "Data gets generated in volume if bind mounted in the host" {
+  container_create_with_host_volumes default -d \
+    -e WILDFLY_PASSWORD=$WILDFLY_PASSWORD
+
+  run container_exec default ls -la $VOL_PREFIX/conf/
+  [[ "$output" =~ "standalone.xml" ]]
+
+  run container_exec default ls -la $VOL_PREFIX/standalone/
+  [[ "$output" =~ "deployments" ]]
+}
+
+@test "If host mounted, password and settings are preserved after deletion" {
+  container_create_with_host_volumes default -d \
+    -e WILDFLY_PASSWORD=$WILDFLY_PASSWORD
+
+  container_remove default
+  container_create_with_host_volumes default -d
+
+  run curl_client default -i --digest http://$WILDFLY_DEFAULT_USER:$WILDFLY_PASSWORD@$APP_NAME:9990/management
+  [[ "$output" =~ '200 OK' ]]
+}
+
 @test "Deploy sample application on standalone" {
   container_create default -d
 
   # download sample app into the deployments directory and allow it some time to come up
-  container_exec default curl --noproxy localhost --retry 5 https://raw.githubusercontent.com/goldmann/wildfly-docker-deployment-example/master/node-info.war -o $VOL_PREFIX/data/deployments/node-info.war
+  container_exec default curl --noproxy localhost --retry 5 \
+    https://raw.githubusercontent.com/goldmann/wildfly-docker-deployment-example/master/node-info.war \
+    -o $VOL_PREFIX/standalone/deployments/node-info.war
   sleep $SLEEP_TIME
 
   # test the deployment
