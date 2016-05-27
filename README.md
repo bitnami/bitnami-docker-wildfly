@@ -335,6 +335,13 @@ This image is tested for expected runtime behavior, using the [Bats](https://git
 bats test.sh
 ```
 
+# Notable Changes
+
+## 10.0.0-r0
+
+- All volumes have been merged at `/bitnami/tomcat`. Now you only need to mount a single volume at `/bitnami/tomcat` for persistence.
+- The logs are always sent to the `stdout` and are no longer collected in the volume.
+
 # Contributing
 
 We'd love for you to contribute to this container. You can request new features by creating an [issue](https://github.com/bitnami/bitnami-docker-wildfly/issues), or submit a [pull request](https://github.com/bitnami/bitnami-docker-wildfly/pulls) with your contribution.
