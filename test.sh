@@ -9,7 +9,7 @@ WILDFLY_PASSWORD=test_password
 APP_NAME=wildfly
 VOL_PREFIX=/bitnami/$APP_NAME
 VOLUMES=$VOL_PREFIX
-SLEEP_TIME=15
+SLEEP_TIME=40
 load tests/docker_helper
 
 # Link to container and execute jboss-cli
