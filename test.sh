@@ -78,13 +78,15 @@ cleanup_environment
 
   run jboss_client default --connect --user=$WILDFLY_DEFAULT_USER --password=$WILDFLY_DEFAULT_PASSWORD --command=version
   [ $status = 0 ]
+  [[ "$output" =~ "JBoss Admin Command-line Interface" ]]
+  [[ "$output" =~ "JBOSS_HOME: /opt/bitnami/wildfly" ]]
 }
 
 @test "jboss-cli.sh can't access Wildfly server without password" {
   container_create default -d
 
-  run jboss_client default --connect --user=$WILDFLY_DEFAULT_USER --command=version
-  [[ "$output" =~ "Unable to authenticate against controller" ]]
+  run jboss_client default --connect --user=$WILDFLY_DEFAULT_USER --password= --command=version
+  [[ "$output" =~ "Server rejected authentication" ]]
 }
 
 @test "Password and settings are preserved after restart" {
