@@ -26,6 +26,7 @@ services:
 
 # Supported tags and respective `Dockerfile` links
 
+
  - [`11`, `11.0.0-r0`, `latest` (11/Dockerfile)](https://github.com/bitnami/bitnami-docker-wildfly/blob/master/11/Dockerfile)
  - [`10`, `10.1.0-r7` (10/Dockerfile)](https://github.com/bitnami/bitnami-docker-wildfly/blob/master/10/Dockerfile)
 
