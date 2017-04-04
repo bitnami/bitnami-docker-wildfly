@@ -1,6 +1,7 @@
 FROM bitnami/minideb-extras:jessie-r13
 MAINTAINER Bitnami <containers@bitnami.com>
 
+
 ENV BITNAMI_IMAGE_VERSION=11.0.0-r0 \
     BITNAMI_APP_NAME=wildfly \
     PATH=/opt/bitnami/wildfly/bin:/opt/bitnami/java/bin:$PATH
@@ -9,6 +10,7 @@ ENV BITNAMI_IMAGE_VERSION=11.0.0-r0 \
 RUN install_packages libc6 libxext6 libx11-6 libxcb1 libxau6 libxdmcp6 libglib2.0-0 libfreetype6 libfontconfig1 libstdc++6 libgcc1 zlib1g libselinux1 libpng12-0 libexpat1 libffi6 libpcre3 libxml2 liblzma5
 
 # Additional modules required
+
 RUN bitnami-pkg install java-1.8.0_121-0 --checksum 2743f753fd1ea88bf90352d95694f89ab0a0fb855cf0d1c7b2a6d92835f9ad27
 
 # Install wildfly
